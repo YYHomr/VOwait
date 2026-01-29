@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOAI | Waitlist</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">VOAI</div>
+            <button id="theme-toggle" class="btn-icon">
+                <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <svg id="moon-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>The Future of Intelligence.</h1>
+            <p class="subtitle">Join the exclusive waitlist for VOAI. Redefining how you interact with AI.</p>
+            <div class="tabs">
+                <button class="tab-btn active" data-target="individual">Individual</button>
+                <button class="tab-btn" data-target="business">Business</button>
+            </div>
+        </section>
+
+        <section id="form-container">
+            <!-- Individual Form -->
+            <form id="individual-form" class="waitlist-form active">
+                <div class="form-group">
+                    <label for="ind-name">Full Name</label>
+                    <input type="text" id="ind-name" name="fullName" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="ind-email">Email Address</label>
+                    <input type="email" id="ind-email" name="email" placeholder="john@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="ind-reason">Why will you use VO?</label>
+                    <textarea id="ind-reason" name="reason" placeholder="Tell us your plans..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ind-source">Where did you hear about us?</label>
+                    <input type="text" id="ind-source" name="source" placeholder="Twitter, LinkedIn, Friend..." required>
+                </div>
+                <button type="submit" class="btn-primary">Join Waitlist</button>
+            </form>
+
+            <!-- Business Form -->
+            <form id="business-form" class="waitlist-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="bus-name">Full Name</label>
+                        <input type="text" id="bus-name" name="fullName" placeholder="Jane Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bus-email">Business Email</label>
+                        <input type="email" id="bus-email" name="email" placeholder="jane@company.com" required>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="bus-company">Business Name</label>
+                        <input type="text" id="bus-company" name="businessName" placeholder="VOAI Corp" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bus-size">Team Size</label>
+                        <select id="bus-size" name="teamSize" required>
+                            <option value="" disabled selected>Select size</option>
+                            <option value="1-10">1-10</option>
+                            <option value="11-50">11-50</option>
+                            <option value="51-200">51-200</option>
+                            <option value="201+">201+</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="bus-country">Country</label>
+                        <input type="text" id="bus-country" name="country" placeholder="United States" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bus-website">Website Link</label>
+                        <input type="url" id="bus-website" name="website" placeholder="https://company.com" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="bus-reason">Why will you use VO?</label>
+                    <textarea id="bus-reason" name="reason" placeholder="How can VOAI help your business?" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="bus-source">Where did you hear about us?</label>
+                    <input type="text" id="bus-source" name="source" placeholder="Conference, Ad, News..." required>
+                </div>
+                <button type="submit" class="btn-primary">Join Business Waitlist</button>
+            </form>
+        </section>
+
+        <div id="success-message" class="hidden">
+            <div class="success-content">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="success-icon"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <h2>You're on the list!</h2>
+                <p>We'll notify you as soon as we're ready for you.</p>
+                <button id="reset-btn" class="btn-secondary">Back</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 VOAI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

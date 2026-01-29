@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOAI | Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        .admin-container { padding: 2rem 0; }
+        .login-box { max-width: 400px; margin: 100px auto; background: var(--secondary-bg); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-color); }
+        .dashboard { display: none; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--secondary-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); text-align: center; }
+        .stat-card h3 { font-size: 0.9rem; opacity: 0.7; margin-bottom: 0.5rem; }
+        .stat-card p { font-size: 2rem; font-weight: 800; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: var(--secondary-bg); border-radius: 12px; overflow: hidden; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+        th { background: rgba(255,255,255,0.05); font-weight: 600; }
+        .table-container { overflow-x: auto; margin-bottom: 3rem; }
+        .section-title { margin: 2rem 0 1rem; font-size: 1.5rem; }
+        .logout-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-color); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">VOAI Admin</div>
+            <button id="logout-btn" class="logout-btn hidden">Logout</button>
+        </div>
+    </header>
+
+    <main class="container admin-container">
+        <!-- Login Section -->
+        <div id="login-section" class="login-box">
+            <h2 style="margin-bottom: 1.5rem;">Admin Login</h2>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="admin-pass" placeholder="Enter password">
+            </div>
+            <button id="login-btn" class="btn-primary">Login</button>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="dashboard">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Individuals</h3>
+                    <p id="count-ind">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Business</h3>
+                    <p id="count-bus">0</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Individual Waitlist</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Reason</th>
+                            <th>Source</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-ind"></tbody>
+                </table>
+            </div>
+
+            <h2 class="section-title">Business Waitlist</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Company</th>
+                            <th>Size</th>
+                            <th>Country</th>
+                            <th>Website</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-bus"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let adminPass = '';
+
+        const login = async () => {
+            const pass = document.getElementById('admin-pass').value;
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pass })
+                });
+                if (res.ok) {
+                    adminPass = pass;
+                    document.getElementById('login-section').classList.add('hidden');
+                    document.getElementById('dashboard-section').style.display = 'block';
+                    document.getElementById('logout-btn').classList.remove('hidden');
+                    loadData();
+                } else {
+                    alert('Invalid password');
+                }
+            } catch (e) {
+                alert('Login failed');
+            }
+        };
+
+        const loadData = async () => {
+            try {
+                const res = await fetch('/api/admin/data', {
+                    headers: { 'x-admin-password': adminPass }
+                });
+                const data = await res.json();
+                
+                document.getElementById('count-ind').innerText = data.individual.length;
+                document.getElementById('count-bus').innerText = data.business.length;
+
+                const indTbody = document.getElementById('table-ind');
+                indTbody.innerHTML = data.individual.map(row => `
+                    <tr>
+                        <td>${row.fullName}</td>
+                        <td>${row.email}</td>
+                        <td>${row.reason}</td>
+                        <td>${row.source}</td>
+                        <td>${new Date(row.timestamp).toLocaleDateString()}</td>
+                    </tr>
+                `).join('');
+
+                const busTbody = document.getElementById('table-bus');
+                busTbody.innerHTML = data.business.map(row => `
+                    <tr>
+                        <td>${row.fullName}</td>
+                        <td>${row.email}</td>
+                        <td>${row.businessName}</td>
+                        <td>${row.teamSize}</td>
+                        <td>${row.country}</td>
+                        <td><a href="${row.website}" target="_blank" style="color:inherit;">Link</a></td>
+                        <td>${new Date(row.timestamp).toLocaleDateString()}</td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                console.error('Failed to load data');
+            }
+        };
+
+        document.getElementById('login-btn').addEventListener('click', login);
+        document.getElementById('admin-pass').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') login();
+        });
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            location.reload();
+        });
+    </script>
+</body>
+</html>
